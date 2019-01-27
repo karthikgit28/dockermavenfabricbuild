@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.2.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.docker.maven</groupId>
+	<artifactId>docker-maven-integrate</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<name>docker-maven-integrate</name>
+	<description>Demo project for Spring Boot</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+
+		<docker.image.prefix>dockerkarthik28</docker.image.prefix>
+		<docker.image.name>dockertestingfabric</docker.image.name>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<!-- <plugin> -->
+			<!-- <groupId>com.spotify</groupId> -->
+			<!-- <artifactId>docker-maven-plugin</artifactId> -->
+			<!-- <version>1.2.0</version> -->
+			<!-- <configuration> -->
+			<!-- <dockerHost>https://192.168.99.100:2376</dockerHost> -->
+			<!-- <imageName>${docker.image.prefix}/${docker.image.name}</imageName> -->
+			<!-- <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory> -->
+			<!-- <forceTags>true</forceTags> -->
+			<!-- <serverId>docker.io</serverId> -->
+			<!-- <resources> -->
+			<!-- <resource> -->
+			<!-- <targetPath>/</targetPath> -->
+			<!-- <directory>${project.build.directory}</directory> -->
+			<!-- <include>${project.build.finalName}.war</include> -->
+			<!-- </resource> -->
+			<!-- </resources> -->
+			<!-- <imageTags> -->
+			<!-- <imageTag>${project.version}</imageTag> -->
+			<!-- <imageTag>latest</imageTag> -->
+			<!-- </imageTags> -->
+			<!-- </configuration> -->
+			<!-- </plugin> -->
+
+
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.26.0</version>
+				<configuration>
+					<dockerHost>https://192.168.99.100:2376</dockerHost>
+					<verbose>true</verbose>
+					<images>
+						<image>
+							<name>${docker.image.prefix}/${docker.image.name}</name>
+							<build>
+								<dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
+								<assembly>
+									<descriptorRef>artifact</descriptorRef>
+								</assembly>
+								<tags>
+									<tag>latest</tag>
+									<tag>${project.version}</tag>
+								</tags>
+							</build>
+						</image>
+					</images>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>
